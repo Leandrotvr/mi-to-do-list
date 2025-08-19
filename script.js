@@ -1,12 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const taskForm = document.getElementById('task-form');
     const taskInput = document.getElementById('task-input');
+    const addTaskBtn = document.getElementById('add-task-btn');
     const taskList = document.getElementById('task-list');
 
     fetchTasks();
 
-    taskForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    addTaskBtn.addEventListener('click', async () => {
         const text = taskInput.value.trim();
         if (text) {
             await addTask(text);
