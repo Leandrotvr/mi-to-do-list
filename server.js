@@ -1,70 +1,79 @@
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
-
-const MONGODB_URI = 'mongodb+srv://leandromaciel581:4m_15r43l_J41@cluster0.4pf8z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const PORT = process.env.PORT || 10000;
 
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Conectado a MongoDB'))
-  .catch(err => console.error('Error de conexión a MongoDB:', err));
-
-const taskSchema = new mongoose.Schema({
-  text: String,
-  completed: Boolean
-});
-
-const Task = mongoose.model('Task', taskSchema);
-
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// Conexión a MongoDB
+mongoose.connect('TU_URL_DE_CONEXION_MONGODB', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Conectado a MongoDB'))
+.catch(err => console.error('Error de conexión a MongoDB:', err));
+
+// Esquema y Modelo
+const tareaSchema = new mongoose.Schema({
+  text: String,
+  completed: Boolean,
+});
+
+const Tarea = mongoose.model('Tarea', tareaSchema);
+
+// Rutas API
 app.get('/api/tasks', async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.json(tasks);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const tareas = await Tarea.find();
+    res.json(tareas);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
 app.post('/api/tasks', async (req, res) => {
-  const task = new Task({
-    text: req.body.text,
-    completed: false
-  });
   try {
-    const newTask = await task.save();
-    res.status(201).json(newTask);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    const nuevaTarea = new Tarea({
+      text: req.body.text,
+      completed: false,
+    });
+    const tareaGuardada = await nuevaTarea.save();
+    res.status(201).json(tareaGuardada);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 });
 
 app.put('/api/tasks/:id', async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
-    if (!task) return res.status(404).json({ message: 'Tarea no encontrada' });
-    task.text = req.body.text;
-    task.completed = req.body.completed;
-    const updatedTask = await task.save();
-    res.json(updatedTask);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    const tarea = await Tarea.findById(req.params.id);
+    if (tarea) {
+      tarea.completed = req.body.completed;
+      const tareaActualizada = await tarea.save();
+      res.json(tareaActualizada);
+    } else {
+      res.status(404).json({ message: 'Tarea no encontrada' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
 app.delete('/api/tasks/:id', async (req, res) => {
   try {
-    const result = await Task.deleteOne({ _id: req.params.id });
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ message: 'Tarea no encontrada' });
+    const tarea = await Tarea.findById(req.params.id);
+    if (tarea) {
+      await tarea.remove();
+      res.json({ message: 'Tarea eliminada' });
+    } else {
+      res.status(404).json({ message: 'Tarea no encontrada' });
     }
-    res.json({ message: 'Tarea eliminada' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
