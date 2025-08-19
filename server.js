@@ -4,7 +4,8 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const uri = "mongodb+srv://leandrotvr:4m_15r43l_J41@cluster0.4pf8z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// Reemplaza esta cadena con la URL de conexión de MongoDB Atlas
+const uri = "mongodb+srv://leandrotvr2:Kurup1_N43@cluster0.4pf8z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const client = new MongoClient(uri);
 
 // Middleware para procesar JSON
