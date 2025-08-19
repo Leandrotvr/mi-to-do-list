@@ -1,50 +1,73 @@
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
-const path = require('path');
+const cors = require('cors');
+const mongoose = require('mongoose');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-const uri = "mongodb+srv://leandrotvr2:Kurup1_N43@cluster0.4pf8z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const client = new MongoClient(uri);
+const MONGODB_URI = 'mongodb+srv://leandromaciel581:4m_15r43l_J41@cluster0.4pf8z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const PORT = process.env.PORT || 10000;
 
-// Middleware para procesar JSON
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch(err => console.error('Error de conexión a MongoDB:', err));
+
+const taskSchema = new mongoose.Schema({
+  text: String,
+  completed: Boolean
+});
+
+const Task = mongoose.model('Task', taskSchema);
+
+app.use(cors());
 app.use(express.json());
 
-// Servir los archivos estáticos
-app.use(express.static(path.join(__dirname)));
+app.get('/api/tasks', async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
-let tasksCollection;
+app.post('/api/tasks', async (req, res) => {
+  const task = new Task({
+    text: req.body.text,
+    completed: false
+  });
+  try {
+    const newTask = await task.save();
+    res.status(201).json(newTask);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 
-async function connectToDatabase() {
-    await client.connect();
-    const database = client.db("mi-to-do-list-db");
-    tasksCollection = database.collection("tasks");
-    console.log("Conectado a la base de datos de MongoDB!");
-}
+app.put('/api/tasks/:id', async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ message: 'Tarea no encontrada' });
+    task.text = req.body.text;
+    task.completed = req.body.completed;
+    const updatedTask = await task.save();
+    res.json(updatedTask);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 
-// Conectar a la base de datos y luego iniciar el servidor
-connectToDatabase().then(() => {
-    // Rutas API para las tareas
-    app.get('/api/tasks', async (req, res) => {
-        const tasks = await tasksCollection.find({}).toArray();
-        res.json(tasks);
-    });
+app.delete('/api/tasks/:id', async (req, res) => {
+  try {
+    const result = await Task.deleteOne({ _id: req.params.id });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Tarea no encontrada' });
+    }
+    res.json({ message: 'Tarea eliminada' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
-    app.post('/api/tasks', async (req, res) => {
-        const newTask = { text: req.body.text, completed: false };
-        const result = await tasksCollection.insertOne(newTask);
-        res.status(201).json(result.ops[0]);
-    });
-
-    app.delete('/api/tasks/:id', async (req, res) => {
-        const taskId = new ObjectId(req.params.id);
-        await tasksCollection.deleteOne({ _id: taskId });
-        res.status(204).end();
-    });
-
-    // Iniciar el servidor
-    app.listen(PORT, () => {
-        console.log(`Servidor escuchando en http://localhost:${PORT}`);
-    });
-
-}).catch(console.error);
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+});
