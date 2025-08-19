@@ -1,63 +1,47 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const taskForm = document.getElementById('task-form');
-    const taskInput = document.getElementById('task-input');
-    const taskList = document.getElementById('task-list');
+    const taskInput = document.getElementById('taskInput');
+    const addButton = document.getElementById('addButton');
+    const taskList = document.getElementById('taskList');
 
-    fetchTasks();
-
-    taskForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const text = taskInput.value.trim();
-        if (text) {
-            await addTask(text);
-            taskInput.value = '';
-        }
-    });
-
-    async function fetchTasks() {
+    // Función para obtener y mostrar las tareas
+    const fetchTasks = async () => {
         const response = await fetch('/api/tasks');
         const tasks = await response.json();
-        renderTasks(tasks);
-    }
-
-    async function addTask(text) {
-        const response = await fetch('/api/tasks', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ text })
-        });
-        if (response.ok) {
-            fetchTasks();
-        }
-    }
-
-    function renderTasks(tasks) {
         taskList.innerHTML = '';
         tasks.forEach(task => {
             const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${task.text}</span>
-                <button class="delete-btn" data-id="${task._id}">Eliminar</button>
-            `;
+            li.innerHTML = `${task.text} <button onclick="deleteTask('${task._id}')">Eliminar</button>`;
+            if (task.completed) {
+                li.style.textDecoration = 'line-through';
+            }
             taskList.appendChild(li);
         });
-    }
+    };
 
-    taskList.addEventListener('click', async (e) => {
-        if (e.target.classList.contains('delete-btn')) {
-            const taskId = e.target.getAttribute('data-id');
-            await deleteTask(taskId);
-        }
-    });
+    // Función para añadir una nueva tarea
+    const addTask = async () => {
+        const text = taskInput.value.trim();
+        if (text === '') return;
 
-    async function deleteTask(id) {
-        const response = await fetch(`/api/tasks/${id}`, {
-            method: 'DELETE'
+        await fetch('/api/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
         });
-        if (response.ok) {
-            fetchTasks();
-        }
-    }
+        taskInput.value = '';
+        fetchTasks();
+    };
+
+    // Asignar el evento click al botón "Añadir"
+    addButton.addEventListener('click', addTask);
+
+    // Cargar las tareas al iniciar la página
+    fetchTasks();
 });
+
+// Esta función debe ser global para que el onclick del HTML la encuentre
+async function deleteTask(id) {
+    await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+    // Recargar la lista de tareas después de eliminar
+    location.reload(); 
+}
