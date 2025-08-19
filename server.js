@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Conexión a MongoDB
-mongoose.connect('TU_URL_DE_CONEXION_MONGODB', {
+mongoose.connect('mongodb://leandrotvr2:bOYcVQXmnds8JHAC@cluster0.oagb14z.mongodb.net:27017/test?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
