@@ -14,7 +14,7 @@ function App() {
   const fetchTareas = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:10000/api/tasks');
+      const response = await fetch('https://mi-lista-api.onrender.com/api/tasks');
       const data = await response.json();
       setTareas(data);
     } catch (error) {
@@ -25,7 +25,7 @@ function App() {
   };
 
   const agregarTarea = async (textoTarea) => {
-    const response = await fetch('http://localhost:10000/api/tasks', {
+    const response = await fetch('https://mi-lista-api.onrender.com/api/tasks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ function App() {
   };
 
   const completarTarea = async (id, completada) => {
-    await fetch(`http://localhost:10000/api/tasks/${id}`, {
+    await fetch(`https://mi-lista-api.onrender.com/api/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ function App() {
   };
 
   const eliminarTarea = async (id) => {
-    await fetch(`http://localhost:10000/api/tasks/${id}`, {
+    await fetch(`https://mi-lista-api.onrender.com/api/tasks/${id}`, {
       method: 'DELETE',
     });
     fetchTareas();
