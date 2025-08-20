@@ -78,7 +78,7 @@ function App() {
                 borderBottom: '2px solid #4caf50',
                 paddingBottom: '10px'
             }}>
-                Proyecto: Lista de Tareas
+                Proyecto: Deja tu chiste
             </h2>
             <p style={{
                 fontWeight: 'bold',
@@ -152,7 +152,7 @@ function App() {
                 </li>
             </ul>
         </section>
-        <h1>Lista de Tareas</h1>
+        <h1>Deja tu chiste</h1>
         <form onSubmit={handleAgregarTarea}>
           <input
             type="text"
