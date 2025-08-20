@@ -10,8 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Conexión a MongoDB
-// **IMPORTANTE**: Ahora incluye el nombre de la base de datos.
-mongoose.connect('mongodb+srv://leandrotvr2:rDxlf4nJ48IdgTGM@cluster0.4pf8z.mongodb.net/todo-list?retryWrites=true&w=majority&appName=Cluster0', {
+mongoose.connect('mongodb+srv://leandrotvr2:rDxlf4nJ48IdgTGM@cluster0.4pf8z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
