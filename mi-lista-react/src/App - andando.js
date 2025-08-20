@@ -65,18 +65,18 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Deja tu chiste</h1>
+        <h1>Lista de Tareas</h1>
         <form onSubmit={handleAgregarTarea}>
           <input
             type="text"
             value={nuevaTarea}
             onChange={(e) => setNuevaTarea(e.target.value)}
-            placeholder="Añade una tontería graciosa..."
+            placeholder="Añadir una nueva tarea..."
           />
           <button type="submit">Añadir</button>
         </form>
         {loading ? (
-          <p>Cargando chistes...</p>
+          <p>Cargando tareas...</p>
         ) : tareas.length > 0 ? (
           tareas.map(tarea => (
             <Tarea
@@ -87,7 +87,7 @@ function App() {
             />
           ))
         ) : (
-          <p>¡No hay chistes!</p>
+          <p>¡No hay tareas!</p>
         )}
       </header>
     </div>
