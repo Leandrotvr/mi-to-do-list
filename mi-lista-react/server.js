@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Conexión a MongoDB
-mongoose.connect('mongodb+srv://leandrotvr2:rDxlf4nJ48IdgTGM@cluster0.4pf8z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+mongoose.connect('mongodb+srv://leandrotvr2:bOYcVQXmnds8JHAC@cluster0.oagb14z.mongodb.net/test?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -65,8 +65,9 @@ app.put('/api/tasks/:id', async (req, res) => {
 
 app.delete('/api/tasks/:id', async (req, res) => {
   try {
-    const tarea = await Tarea.findByIdAndDelete(req.params.id);
+    const tarea = await Tarea.findById(req.params.id);
     if (tarea) {
+      await tarea.remove();
       res.json({ message: 'Tarea eliminada' });
     } else {
       res.status(404).json({ message: 'Tarea no encontrada' });

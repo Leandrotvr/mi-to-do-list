@@ -1,0 +1,36 @@
+2025-08-19T17:15:32.936164464Z ==> Cloning from https://github.com/Leandrotvr/mi-to-do-list
+2025-08-19T17:15:33.793786695Z ==> Checking out commit ae65f1313defdd8597326cf788c6518b9e8e8930 in branch main
+2025-08-19T17:15:35.994166825Z ==> Using Node.js version 22.16.0 (default)
+2025-08-19T17:15:36.020242002Z ==> Docs on specifying a Node.js version: https://render.com/docs/node-version
+2025-08-19T17:15:37.814812975Z ==> Running build command 'npm install'...
+2025-08-19T17:15:38.422653356Z 
+2025-08-19T17:15:38.422676516Z removed 27 packages, and audited 96 packages in 544ms
+2025-08-19T17:15:38.422691917Z 
+2025-08-19T17:15:38.422705477Z 15 packages are looking for funding
+2025-08-19T17:15:38.422712788Z   run `npm fund` for details
+2025-08-19T17:15:38.42351055Z 
+2025-08-19T17:15:38.423519451Z found 0 vulnerabilities
+2025-08-19T17:15:48.011757247Z ==> Uploading build...
+2025-08-19T17:15:52.320911129Z ==> Uploaded in 3.4s. Compression took 0.9s
+2025-08-19T17:15:52.334646613Z ==> Build successful 🎉
+2025-08-19T17:15:56.935828459Z ==> Deploying...
+2025-08-19T17:16:07.169083586Z ==> Running 'node server.js'
+2025-08-19T17:16:10.477639904Z Servidor escuchando en http://localhost:10000
+2025-08-19T17:16:10.563174693Z Error de conexión a MongoDB: MongoParseError: Invalid scheme, expected connection string to start with "mongodb://" or "mongodb+srv://"
+2025-08-19T17:16:10.563206944Z     at new ConnectionString (/opt/render/project/src/node_modules/mongodb-connection-string-url/lib/index.js:86:19)
+2025-08-19T17:16:10.563211054Z     at parseOptions (/opt/render/project/src/node_modules/mongodb/lib/connection_string.js:198:17)
+2025-08-19T17:16:10.563214094Z     at new MongoClient (/opt/render/project/src/node_modules/mongodb/lib/mongo_client.js:66:61)
+2025-08-19T17:16:10.563216434Z     at NativeConnection.createClient (/opt/render/project/src/node_modules/mongoose/lib/drivers/node-mongodb-native/connection.js:343:14)
+2025-08-19T17:16:10.563219114Z     at NativeConnection.openUri (/opt/render/project/src/node_modules/mongoose/lib/connection.js:1071:34)
+2025-08-19T17:16:10.563222294Z     at Mongoose.connect (/opt/render/project/src/node_modules/mongoose/lib/mongoose.js:450:15)
+2025-08-19T17:16:10.563225615Z     at Object.<anonymous> (/opt/render/project/src/server.js:13:10)
+2025-08-19T17:16:10.563228665Z     at Module._compile (node:internal/modules/cjs/loader:1730:14)
+2025-08-19T17:16:10.563231545Z     at Object..js (node:internal/modules/cjs/loader:1895:10)
+2025-08-19T17:16:10.563234105Z     at Module.load (node:internal/modules/cjs/loader:1465:32)
+2025-08-19T17:16:17.553564692Z ==> Your service is live 🎉
+2025-08-19T17:16:17.582986009Z ==> 
+2025-08-19T17:16:18.066140174Z ==> ///////////////////////////////////////////////////////////
+2025-08-19T17:16:18.444270329Z ==> 
+2025-08-19T17:16:18.474506056Z ==> Available at your primary URL https://mi-lista-api.onrender.com
+2025-08-19T17:16:18.501866654Z ==> 
+2025-08-19T17:16:18.529433321Z ==> ///////////////////////////////////////////////////////////
