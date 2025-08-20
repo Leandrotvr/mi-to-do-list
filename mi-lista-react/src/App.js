@@ -16,7 +16,7 @@ function App() {
     try {
       const response = await fetch('https://mi-lista-api.onrender.com/api/tasks');
       const data = await response.json();
-      setTareas(data);
+      setTareas(data.reverse());
     } catch (error) {
       console.error("Error al obtener las tareas:", error);
     } finally {
