@@ -13,6 +13,7 @@ function App() {
   const fetchTareas = async () => {
     setLoading(true);
     try {
+      // **IMPORTANTE**: Reemplaza esta URL con la URL de tu servicio de backend en Render.
       const response = await fetch('https://tu-url-de-backend.onrender.com/api/tasks');
       const data = await response.json();
       setTareas(data);
