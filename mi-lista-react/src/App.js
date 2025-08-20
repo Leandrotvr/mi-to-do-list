@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Tarea from './Tarea';
 
 function App() {
   const [tareas, setTareas] = useState([]);
@@ -14,7 +13,7 @@ function App() {
   const fetchTareas = async () => {
     setLoading(true);
     try {
-      const response = await fetch('https://mi-lista-api.onrender.com/api/tasks');
+      const response = await fetch('https://tu-url-de-backend.onrender.com/api/tasks');
       const data = await response.json();
       setTareas(data);
     } catch (error) {
@@ -24,49 +23,39 @@ function App() {
     }
   };
 
-  const agregarTarea = async (textoTarea) => {
-    const response = await fetch('https://mi-lista-api.onrender.com/api/tasks', {
+  const agregarTarea = async (e) => {
+    e.preventDefault();
+    if (!nuevaTarea.trim()) return;
+    await fetch('https://tu-url-de-backend.onrender.com/api/tasks', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: textoTarea }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: nuevaTarea }),
     });
-    if (response.ok) {
-      fetchTareas();
-    }
+    setNuevaTarea('');
+    fetchTareas();
   };
 
-  const completarTarea = async (id, completada) => {
-    await fetch(`https://mi-lista-api.onrender.com/api/tasks/${id}`, {
+  const completarTarea = async (id, completed) => {
+    await fetch(`https://tu-url-de-backend.onrender.com/api/tasks/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ completed: !completada }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ completed: !completed }),
     });
     fetchTareas();
   };
 
   const eliminarTarea = async (id) => {
-    await fetch(`https://mi-lista-api.onrender.com/api/tasks/${id}`, {
+    await fetch(`https://tu-url-de-backend.onrender.com/api/tasks/${id}`, {
       method: 'DELETE',
     });
     fetchTareas();
-  };
-
-  const handleAgregarTarea = (e) => {
-    e.preventDefault();
-    if (!nuevaTarea.trim()) return;
-    agregarTarea(nuevaTarea);
-    setNuevaTarea('');
   };
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Deja tu chiste</h1>
-        <form onSubmit={handleAgregarTarea}>
+        <form onSubmit={agregarTarea}>
           <input
             type="text"
             value={nuevaTarea}
@@ -78,14 +67,16 @@ function App() {
         {loading ? (
           <p>Cargando chistes...</p>
         ) : tareas.length > 0 ? (
-          tareas.map(tarea => (
-            <Tarea
-              key={tarea._id}
-              tarea={{ texto: tarea.text, completada: tarea.completed, id: tarea._id }}
-              onCompletar={() => completarTarea(tarea._id, tarea.completed)}
-              onEliminar={() => eliminarTarea(tarea._id)}
-            />
-          ))
+          <ul className="todo-list">
+            {tareas.map((tarea) => (
+              <li key={tarea._id} className={tarea.completed ? 'completed' : ''}>
+                <span onClick={() => completarTarea(tarea._id, tarea.completed)}>
+                  {tarea.text}
+                </span>
+                <button onClick={() => eliminarTarea(tarea._id)}>Eliminar</button>
+              </li>
+            ))}
+          </ul>
         ) : (
           <p>¡No hay chistes!</p>
         )}
